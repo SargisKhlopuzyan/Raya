@@ -3,6 +3,7 @@ package com.example.sargiskh.raya.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.example.sargiskh.raya.MainActivity;
 import com.example.sargiskh.raya.R;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,11 +23,13 @@ import java.util.List;
 public class RecyclerViewAdapter_III extends RecyclerView.Adapter<RecyclerViewAdapter_III.ViewHolder> {
 
     private List<String> data;
+    private List<Float> optimalValuesList;
     private int numberOfRows = 0;
     private int numberOfColumns = 0;
 
-    public RecyclerViewAdapter_III(MainActivity activity, List<String> data, int numberOfRows, int numberOfColumns) {
+    public RecyclerViewAdapter_III(List<String> data, List<Float> optimalValuesList, int numberOfRows, int numberOfColumns) {
         this.data = data;
+        this.optimalValuesList = optimalValuesList;
         this.numberOfRows = numberOfRows;
         this.numberOfColumns = numberOfColumns;
     }
@@ -49,15 +53,20 @@ public class RecyclerViewAdapter_III extends RecyclerView.Adapter<RecyclerViewAd
     @Override
     public void onBindViewHolder(final RecyclerViewAdapter_III.ViewHolder viewHolder, final int position) {
 
-        for (int ri = 0; ri < numberOfRows; ri++) {
-            if (viewHolder.linearLayout.getChildAt(ri) instanceof TextView) {
-                final TextView textView = ((TextView) (viewHolder.linearLayout.getChildAt(ri)));
+        Log.e("LOG_TAG", "" + (Arrays.toString(optimalValuesList.toArray())));
 
-                int pos = position + ri*numberOfColumns;
-                if (data.size() != 0 && pos < data.size()) {
-                    textView.setText(data.get(pos));
+        for (int rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
+            if (viewHolder.linearLayout.getChildAt(rowIndex) instanceof TextView) {
+                final TextView textView = ((TextView) (viewHolder.linearLayout.getChildAt(rowIndex)));
+
+                int itemPosition = position + rowIndex * numberOfColumns;
+                if (position == 0 || rowIndex == 0 || position == (numberOfColumns - 1)) {
+                    textView.setText(data.get(itemPosition));
                 } else {
-                    textView.setText("");
+                    String stringValue = (data.get(itemPosition)).isEmpty() ? "0" : data.get(itemPosition);
+                    float value = Float.valueOf(stringValue);
+                    float optimalValue = optimalValuesList.get(rowIndex - 1);
+                    textView.setText( "" + (value/optimalValue));
                 }
             }
         }

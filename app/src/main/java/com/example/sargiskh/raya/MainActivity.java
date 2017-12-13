@@ -17,10 +17,13 @@ import com.example.sargiskh.raya.fragments.Fragment_II;
 import com.example.sargiskh.raya.fragments.Fragment_III;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, RecyclerViewAdapter_I.EditTextChangedListener {
 
     public ArrayList<String> originalData = new ArrayList<>();
+    public ArrayList<Float> optimalValuesList = new ArrayList<>();
+
     public boolean isOriginalDataChanged = false;
 
     public int numberOfRows = 1;
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onPageSelected(int position) {
         if (isOriginalDataChanged) {
+            getOptimalValues();
             for (int i = 1; i < viewPagerAdapter.getCount(); i++) {
                 if (viewPagerAdapter.getItem(i) instanceof Fragment_II) {
                     ((Fragment_II)viewPagerAdapter.getItem(i)).notifyOriginalDataChanged();
@@ -88,5 +92,33 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         } else {
             Log.e("LOG_TAG", "null");
         }
+    }
+
+    public void getOptimalValues() {
+        optimalValuesList.clear();
+        for (int rowIndex = 1; rowIndex < numberOfRows; rowIndex ++) {
+
+            int columnStartPosition = (rowIndex) * numberOfColumns + 1;
+            int ratingPosition = (rowIndex + 1) * numberOfColumns - 1;
+            int ratingValue = Integer.valueOf(originalData.get(ratingPosition));
+
+            float min = Float.valueOf(originalData.get(columnStartPosition));
+            float max = Float.valueOf(originalData.get(columnStartPosition));
+
+            for(int k = columnStartPosition; k < columnStartPosition + numberOfColumns - 2; k ++) {
+                String stringValue = originalData.get(k);
+
+                float f = Float.valueOf(stringValue);
+                if(f < min) min = f;
+                if(f > max) max = f;
+            }
+
+            if (ratingValue == 1) {
+                optimalValuesList.add(max);
+            } else {
+                optimalValuesList.add(min);
+            }
+        }
+        Log.e("LOG_TAG", "" + (Arrays.toString(optimalValuesList.toArray())));
     }
 }

@@ -46,19 +46,11 @@ public class Fragment_III extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fragment__iii, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
 
-        createRecyclerView();
         return view;
     }
 
-    private void createRecyclerView() {
-        recyclerViewAdapter = new RecyclerViewAdapter_III(activity, activity.originalData, activity.numberOfRows, activity.numberOfColumns);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(recyclerViewAdapter);
-    }
-
     public void notifyOriginalDataChanged() {
-        recyclerViewAdapter = new RecyclerViewAdapter_III(activity, activity.originalData, activity.numberOfRows, activity.numberOfColumns);
+        recyclerViewAdapter = new RecyclerViewAdapter_III(activity.originalData, activity.optimalValuesList, activity.numberOfRows, activity.numberOfColumns);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);

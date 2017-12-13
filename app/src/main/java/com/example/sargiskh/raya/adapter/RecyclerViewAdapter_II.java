@@ -1,20 +1,19 @@
 package com.example.sargiskh.raya.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.sargiskh.raya.MainActivity;
 import com.example.sargiskh.raya.R;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,11 +23,13 @@ import java.util.List;
 public class RecyclerViewAdapter_II extends RecyclerView.Adapter<RecyclerViewAdapter_II.ViewHolder> {
 
     private List<String> data;
+    private List<Float> optimalValuesList;
     private int numberOfRows = 0;
     private int numberOfColumns = 0;
 
-    public RecyclerViewAdapter_II(MainActivity activity, List<String> data, int numberOfRows, int numberOfColumns) {
+    public RecyclerViewAdapter_II(List<String> data, List<Float> optimalValuesList, int numberOfRows, int numberOfColumns) {
         this.data = data;
+        this.optimalValuesList = optimalValuesList;
         this.numberOfRows = numberOfRows;
         this.numberOfColumns = numberOfColumns;
     }
@@ -52,19 +53,24 @@ public class RecyclerViewAdapter_II extends RecyclerView.Adapter<RecyclerViewAda
     @Override
     public void onBindViewHolder(final RecyclerViewAdapter_II.ViewHolder viewHolder, final int position) {
 
+        Log.e("LOG_TAG", "" + (Arrays.toString(optimalValuesList.toArray())));
 
-        for (int ri = 0; ri < numberOfRows; ri++) {
-            if (viewHolder.linearLayout.getChildAt(ri) instanceof TextView) {
-                final TextView textView = ((TextView) (viewHolder.linearLayout.getChildAt(ri)));
+        for (int rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
+            if (viewHolder.linearLayout.getChildAt(rowIndex) instanceof TextView) {
+                final TextView textView = ((TextView) (viewHolder.linearLayout.getChildAt(rowIndex)));
 
-                int pos = position + ri*numberOfColumns;
-                if (data.size() != 0 && pos < data.size()) {
-
-                    boolean isOptimal = false;
-
-                    textView.setText(data.get(pos));
+                textView.setBackgroundResource(R.drawable.recycler_view_item_rounded_background);
+                int itemPosition = position + rowIndex * numberOfColumns;
+                if (position == 0 || rowIndex == 0 || position == (numberOfColumns - 1)) {
+                    textView.setText(data.get(itemPosition));
                 } else {
-                    textView.setText("");
+                    String stringValue = (data.get(itemPosition)).isEmpty() ? "0" : data.get(itemPosition);
+                    textView.setText(stringValue);
+                    float value = Float.valueOf(stringValue);
+                    float optimalValue = optimalValuesList.get(rowIndex - 1);
+                    if (value == optimalValue) {
+                        textView.setBackgroundResource(R.drawable.optimal_recycler_view_item_rounded_background);
+                    }
                 }
             }
         }
@@ -83,30 +89,5 @@ public class RecyclerViewAdapter_II extends RecyclerView.Adapter<RecyclerViewAda
             super(itemView);
             linearLayout = (LinearLayout)itemView.findViewById(R.id.linearLayout);
         }
-    }
-
-
-    public boolean checkIsOptimal(int indexRow, int indexColumn) {
-
-        boolean isOptimal = false;
-
-        int optimalValue = 0;
-        for (int i = 1; i < numberOfColumns - 1; i ++) {
-
-            int dataPosition = indexRow*numberOfColumns + indexColumn;
-            int ratingPosition = (indexRow + 1) * numberOfColumns - 1;
-            int ratingValue = Integer.valueOf(data.get(ratingPosition));
-            
-            if (ratingValue == 1) {
-                if (optimalValue < Integer.valueOf(data.get(dataPosition))) {
-                    isOptimal = true;
-                }
-            } else {
-
-            }
-
-
-        }
-        return isOptimal;
     }
 }
