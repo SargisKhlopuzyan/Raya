@@ -30,8 +30,6 @@ public class Fragment_V extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Log.e("LOG_TAG", "onCreateView: Fragment_IV");
-
         activity = (MainActivity)getActivity();
 
         // Inflate the layout for this fragment
@@ -42,7 +40,7 @@ public class Fragment_V extends Fragment {
     }
 
     public void notifyOriginalDataChanged() {
-        recyclerViewAdapter = new RecyclerViewAdapter_V(activity.integralValuesList, activity.numberOfRows, activity.numberOfColumns);
+        recyclerViewAdapter = new RecyclerViewAdapter_V(activity.integralValuesList, activity.integralIndicatorValue, activity.numberOfRows, activity.numberOfColumns);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);

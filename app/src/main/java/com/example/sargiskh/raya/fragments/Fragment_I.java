@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 
 import com.example.sargiskh.raya.MainActivity;
 import com.example.sargiskh.raya.R;
@@ -29,15 +30,12 @@ public class Fragment_I extends Fragment {
     public EditText editTextNumberOfColumns;
     public Button buttonSave;
 
-
     public Fragment_I() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        Log.e("LOG_TAG", "onCreateView: Fragment_I");
 
         activity = (MainActivity)getActivity();
 
@@ -55,6 +53,7 @@ public class Fragment_I extends Fragment {
                 activity.isOriginalDataChanged = true;
             }
         });
+
         return view;
     }
 
@@ -64,23 +63,23 @@ public class Fragment_I extends Fragment {
 
         if(stringNumberOfRows.isEmpty()) stringNumberOfRows = "0";
         if(stringNumberOfColumns.isEmpty()) stringNumberOfColumns = "0";
-        activity.numberOfRows = Integer.parseInt(stringNumberOfRows);
-        activity.numberOfColumns = Integer.parseInt(stringNumberOfColumns);
+        activity.numberOfRows = Integer.parseInt(stringNumberOfRows) + 1;
+        activity.numberOfColumns = Integer.parseInt(stringNumberOfColumns) + 3;
 
-        activity.originalData.clear();
+        activity.originalValuesList.clear();
         for (int i = 0; i< activity.numberOfColumns*activity.numberOfRows; i++) {
             if (i == activity.numberOfColumns - 2) {
-                activity.originalData.add("Optimal");
+                activity.originalValuesList.add("Optimal");
             } else if (i == activity.numberOfColumns - 1) {
-                activity.originalData.add("Rating");
+                activity.originalValuesList.add("Rating");
             } else if (i < activity.numberOfColumns || (i % activity.numberOfColumns) == 0) {
-                activity.originalData.add("");
+                activity.originalValuesList.add("");
             } else {
-                activity.originalData.add("");
+                activity.originalValuesList.add("");
             }
         }
 
-        recyclerViewAdapter = new RecyclerViewAdapter_I(activity, activity.originalData, activity.numberOfRows, activity.numberOfColumns);
+        recyclerViewAdapter = new RecyclerViewAdapter_I(activity, activity.originalValuesList, activity.numberOfRows, activity.numberOfColumns);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);

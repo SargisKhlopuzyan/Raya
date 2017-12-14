@@ -19,11 +19,13 @@ import java.util.List;
 public class RecyclerViewAdapter_V extends RecyclerView.Adapter<RecyclerViewAdapter_V.ViewHolder> {
 
     private List<String> integralValuesList;
+    private float integralIndicatorValue = 0.0F;
     private int numberOfRows = 0;
     private int numberOfColumns = 0;
 
-    public RecyclerViewAdapter_V(List<String> integralValuesList, int numberOfRows, int numberOfColumns) {
+    public RecyclerViewAdapter_V(List<String> integralValuesList, float integralIndicatorValue, int numberOfRows, int numberOfColumns) {
         this.integralValuesList = integralValuesList;
+        this.integralIndicatorValue = integralIndicatorValue;
         this.numberOfRows = numberOfRows;
         this.numberOfColumns = numberOfColumns;
     }
@@ -52,8 +54,19 @@ public class RecyclerViewAdapter_V extends RecyclerView.Adapter<RecyclerViewAdap
             if (viewHolder.linearLayout.getChildAt(rowIndex) instanceof TextView) {
                 final TextView textView = ((TextView) (viewHolder.linearLayout.getChildAt(rowIndex)));
 
+                textView.setBackgroundResource(R.drawable.recycler_view_item_rounded_background);
+
                 int itemPosition = position + rowIndex * (numberOfColumns - 3);
-                textView.setText(integralValuesList.get(itemPosition));
+                String stringItemValue = (integralValuesList.get(itemPosition)).isEmpty() ? "0" : integralValuesList.get(itemPosition);
+
+                textView.setText(stringItemValue);
+
+                if (rowIndex != 0) {
+                    float value = Float.valueOf(stringItemValue);
+                    if (value == integralIndicatorValue) {
+                        textView.setBackgroundResource(R.drawable.optimal_recycler_view_item_rounded_background);
+                    }
+                }
             }
         }
     }

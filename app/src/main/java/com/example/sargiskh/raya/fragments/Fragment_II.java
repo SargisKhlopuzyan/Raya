@@ -13,9 +13,6 @@ import com.example.sargiskh.raya.MainActivity;
 import com.example.sargiskh.raya.R;
 import com.example.sargiskh.raya.adapter.RecyclerViewAdapter_II;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -32,8 +29,6 @@ public class Fragment_II extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Log.e("LOG_TAG", "onCreateView: Fragment_II");
-
         activity = (MainActivity)getActivity();
 
         // Inflate the layout for this fragment
@@ -43,7 +38,7 @@ public class Fragment_II extends Fragment {
     }
 
     public void notifyOriginalDataChanged() {
-        recyclerViewAdapter = new RecyclerViewAdapter_II(activity.originalData, activity.optimalValuesList, activity.numberOfRows, activity.numberOfColumns);
+        recyclerViewAdapter = new RecyclerViewAdapter_II(activity.originalValuesList, activity.optimalValuesList, activity.numberOfRows, activity.numberOfColumns);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);

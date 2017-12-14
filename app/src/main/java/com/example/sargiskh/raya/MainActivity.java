@@ -1,13 +1,10 @@
 package com.example.sargiskh.raya;
 
-import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.example.sargiskh.raya.adapter.RecyclerViewAdapter_I;
@@ -23,11 +20,13 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, RecyclerViewAdapter_I.EditTextChangedListener {
 
-    public ArrayList<String> originalData = new ArrayList<>();
+    public ArrayList<String> originalValuesList = new ArrayList<>();
     public ArrayList<Float> optimalValuesList = new ArrayList<>();
     public ArrayList<String> relativeValuesList = new ArrayList<>();
     public ArrayList<String> relativeRatingValuesList = new ArrayList<>();
     public ArrayList<String> integralValuesList = new ArrayList<>();
+    public ArrayList<String> integralIndicatorValuesCouple = new ArrayList<>();
+    public float integralIndicatorValue = 0.0F;
 
     public boolean isOriginalDataChanged = false;
 
@@ -47,11 +46,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
 //        // Add Fragments to viewPagerAdapter one by one
-        viewPagerAdapter.addFragment(new Fragment_I(), "FRAG I");
-        viewPagerAdapter.addFragment(new Fragment_II(), "FRAG II");
-        viewPagerAdapter.addFragment(new Fragment_III(), "FRAG III");
-        viewPagerAdapter.addFragment(new Fragment_IV(), "FRAG IV");
-        viewPagerAdapter.addFragment(new Fragment_V(), "FRAG V");
+        viewPagerAdapter.addFragment(new Fragment_I(), "PAGE I");
+        viewPagerAdapter.addFragment(new Fragment_II(), "PAGE II");
+        viewPagerAdapter.addFragment(new Fragment_III(), "PAGE III");
+        viewPagerAdapter.addFragment(new Fragment_IV(), "PAGE IV");
+        viewPagerAdapter.addFragment(new Fragment_V(), "PAGE V");
         viewPager.setOffscreenPageLimit(5);
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.addOnPageChangeListener(this);
@@ -73,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             getRelativeValues();
             getRelativeRatingValues();
             getIntegralValues();
+            getIntegralIndicatorValue();
 
             for (int i = 1; i < viewPagerAdapter.getCount(); i++) {
                 if (viewPagerAdapter.getItem(i) instanceof Fragment_II) {
@@ -96,17 +96,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void editTextChanged(int rowIndex, int columnIndex, String value) {
-        originalData.set(columnIndex + rowIndex*numberOfColumns, value);
+        originalValuesList.set(columnIndex + rowIndex*numberOfColumns, value);
         isOriginalDataChanged = true;
     }
 
     public void hideSoftKeyboard() {
         if(getCurrentFocus()!=null) {
-            Log.e("LOG_TAG", "not a null");
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        } else {
-            Log.e("LOG_TAG", "null");
         }
     }
 
@@ -116,15 +113,15 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
             int columnStartPosition = (rowIndex) * numberOfColumns + 1;
             int ratingPosition = (rowIndex + 1) * numberOfColumns - 2;
-            String ratingValue = originalData.get(ratingPosition);
+            String ratingValue = originalValuesList.get(ratingPosition);
 
-            String stringColumnStartPosition = originalData.get(columnStartPosition);
+            String stringColumnStartPosition = originalValuesList.get(columnStartPosition);
             stringColumnStartPosition = stringColumnStartPosition.isEmpty() ? "0" : stringColumnStartPosition;
             float min = Float.valueOf(stringColumnStartPosition);
             float max = Float.valueOf(stringColumnStartPosition);
 
             for(int k = columnStartPosition; k < columnStartPosition + numberOfColumns - 3; k ++) {
-                String stringItemValue = originalData.get(k);
+                String stringItemValue = originalValuesList.get(k);
                 stringItemValue = stringItemValue.isEmpty() ? "0" : stringItemValue;
                 float f = Float.valueOf(stringItemValue);
                 if(f < min) min = f;
@@ -137,10 +134,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 optimalValuesList.add(max);
             }
         }
-        Log.e("LOG_TAG", "*********** OptimalValuesList ***********");
-        Log.e("LOG_TAG", "" + (Arrays.toString(optimalValuesList.toArray())));
-        Log.e("LOG_TAG", "**********************");
-
     }
 
     public void getRelativeValues() {
@@ -151,10 +144,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 int itemPosition = rowIndex * numberOfColumns + columnIndex;
 
                 if (rowIndex == 0 || columnIndex == 0 || columnIndex == numberOfColumns - 2 || columnIndex == numberOfColumns - 1) {
-                    relativeValuesList.add(originalData.get(itemPosition));
+                    relativeValuesList.add(originalValuesList.get(itemPosition));
                 } else {
 
-                    String stringItemValue = originalData.get(itemPosition);
+                    String stringItemValue = originalValuesList.get(itemPosition);
                     stringItemValue = stringItemValue.isEmpty() ? "0" : stringItemValue;
                     float itemValue = Float.valueOf(stringItemValue);
                     float optimalValue = optimalValuesList.get(rowIndex - 1);
@@ -164,9 +157,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 }
             }
         }
-        Log.e("LOG_TAG", "*********** RelativeValuesList ***********");
-        Log.e("LOG_TAG", "" + (Arrays.toString(relativeValuesList.toArray())));
-        Log.e("LOG_TAG", "**********************");
     }
 
     public void getRelativeRatingValues() {
@@ -178,11 +168,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 int ratingPosition = (rowIndex + 1) * numberOfColumns - 1;
 
                 if (rowIndex == 0 || columnIndex == 0 || columnIndex == numberOfColumns - 2 || columnIndex == numberOfColumns - 1) {
-                    relativeRatingValuesList.add(originalData.get(itemPosition));
+                    relativeRatingValuesList.add(originalValuesList.get(itemPosition));
                 } else {
 
                     String stringItemValue = relativeValuesList.get(itemPosition);
-                    String stringRatingValue = originalData.get(ratingPosition);
+                    String stringRatingValue = originalValuesList.get(ratingPosition);
                     stringItemValue = stringItemValue.isEmpty() ? "0" : stringItemValue;
                     stringRatingValue = stringRatingValue.isEmpty() ? "0" : stringRatingValue;
                     float itemValue = Float.valueOf(stringItemValue);
@@ -192,16 +182,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 }
             }
         }
-        Log.e("LOG_TAG", "*********** RelativeRatingValuesList ***********");
-        Log.e("LOG_TAG", "" + (Arrays.toString(relativeRatingValuesList.toArray())));
-        Log.e("LOG_TAG", "**********************");
     }
 
     public void getIntegralValues() {
         integralValuesList.clear();
 
         for (int columnIndex = 1; columnIndex < numberOfColumns - 2; columnIndex++) {
-            integralValuesList.add(originalData.get(columnIndex));
+            integralValuesList.add(originalValuesList.get(columnIndex));
         }
 
         for (int columnIndex = 1; columnIndex < numberOfColumns - 2; columnIndex++) {
@@ -215,10 +202,22 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
             integralValuesList.add("" + integralValue);
         }
-
-        Log.e("LOG_TAG", "*********** IntegralValuesList ***********");
-        Log.e("LOG_TAG", "" + (Arrays.toString(integralValuesList.toArray())));
-        Log.e("LOG_TAG", "**********************");
     }
 
+    public void getIntegralIndicatorValue() {
+        integralIndicatorValuesCouple.clear();
+
+        int startPosition = numberOfColumns - 3;
+        String stringStartPosition = integralValuesList.get(startPosition);
+        stringStartPosition = stringStartPosition.isEmpty() ? "0" : stringStartPosition;
+        float min = Float.valueOf(stringStartPosition);
+
+        for(int itemPosition = startPosition; itemPosition < 2 * startPosition; itemPosition ++) {
+            String stringItemValue = integralValuesList.get(itemPosition);
+            stringItemValue = stringItemValue.isEmpty() ? "0" : stringItemValue;
+            float f = Float.valueOf(stringItemValue);
+            if(f < min) min = f;
+        }
+        integralIndicatorValue = min;
+    }
 }

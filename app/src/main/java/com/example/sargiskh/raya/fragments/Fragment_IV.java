@@ -30,8 +30,6 @@ public class Fragment_IV extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Log.e("LOG_TAG", "onCreateView: Fragment_IV");
-
         activity = (MainActivity)getActivity();
 
         // Inflate the layout for this fragment
