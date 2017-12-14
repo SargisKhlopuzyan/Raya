@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Raya</string>
-    <string name="rows">Rows: </string>
-    <string name="columns">Columns: </string>
+    <string name="rows">Number of Rows: </string>
+    <string name="columns">Number of Columns: </string>
+    <string name="rowsHint">Rows</string>
+    <string name="columnsHint">Columns</string>
 </resources>

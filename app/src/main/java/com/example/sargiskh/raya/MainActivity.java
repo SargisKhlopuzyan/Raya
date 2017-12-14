@@ -1,22 +1,26 @@
 package com.example.sargiskh.raya;
 
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.sargiskh.raya.adapter.RecyclerViewAdapter_I;
 import com.example.sargiskh.raya.adapter.ViewPagerAdapter;
-import com.example.sargiskh.raya.fragments.Fragment_I;
 import com.example.sargiskh.raya.fragments.Fragment_II;
 import com.example.sargiskh.raya.fragments.Fragment_III;
 import com.example.sargiskh.raya.fragments.Fragment_IV;
 import com.example.sargiskh.raya.fragments.Fragment_V;
+import com.example.sargiskh.raya.fragments.MainFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, RecyclerViewAdapter_I.EditTextChangedListener {
 
@@ -33,30 +37,44 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public int numberOfRows = 1;
     public int numberOfColumns = 1;
 
-    private ViewPager viewPager;
-    private ViewPagerAdapter viewPagerAdapter;
-    private TabLayout tabLayout;
+
+    private NavigationView navigationView;
+//    private DrawerLayout drawer;
+    private View navHeader;
+
+    public EditText editTextNumberOfRows;
+    public EditText editTextNumberOfColumns;
+    public Button buttonSave;
+
+    public MainFragment mainFragment = new MainFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+//        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
 
-//        // Add Fragments to viewPagerAdapter one by one
-        viewPagerAdapter.addFragment(new Fragment_I(), "PAGE I");
-        viewPagerAdapter.addFragment(new Fragment_II(), "PAGE II");
-        viewPagerAdapter.addFragment(new Fragment_III(), "PAGE III");
-        viewPagerAdapter.addFragment(new Fragment_IV(), "PAGE IV");
-        viewPagerAdapter.addFragment(new Fragment_V(), "PAGE V");
-        viewPager.setOffscreenPageLimit(5);
-        viewPager.setAdapter(viewPagerAdapter);
-        viewPager.addOnPageChangeListener(this);
+        // Navigation view header
+        navHeader = navigationView.getHeaderView(0);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        editTextNumberOfRows = navHeader.findViewById(R.id.editTextNumberOfRows);
+        editTextNumberOfColumns = navHeader.findViewById(R.id.editTextNumberOfColumns);
+        buttonSave = navHeader.findViewById(R.id.buttonSave);
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createRecyclerView();
+                isOriginalDataChanged = true;
+            }
+        });
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, mainFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
@@ -74,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             getIntegralValues();
             getIntegralIndicatorValue();
 
+            ViewPagerAdapter viewPagerAdapter = mainFragment.viewPagerAdapter;
             for (int i = 1; i < viewPagerAdapter.getCount(); i++) {
                 if (viewPagerAdapter.getItem(i) instanceof Fragment_II) {
                     ((Fragment_II)viewPagerAdapter.getItem(i)).notifyOriginalDataChanged();
@@ -85,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     ((Fragment_V)viewPagerAdapter.getItem(i)).notifyOriginalDataChanged();
                 }
             }
+
             isOriginalDataChanged = false;
         }
         hideSoftKeyboard();
@@ -207,6 +227,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void getIntegralIndicatorValue() {
         integralIndicatorValuesCouple.clear();
 
+        if (integralValuesList.size() == 0) {
+            return;
+        }
         int startPosition = numberOfColumns - 3;
         String stringStartPosition = integralValuesList.get(startPosition);
         stringStartPosition = stringStartPosition.isEmpty() ? "0" : stringStartPosition;
@@ -219,5 +242,37 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             if(f < min) min = f;
         }
         integralIndicatorValue = min;
+    }
+
+    private void createRecyclerView() {
+        String stringNumberOfRows = editTextNumberOfRows.getText().toString();
+        String stringNumberOfColumns = editTextNumberOfColumns.getText().toString();
+
+        if(stringNumberOfRows.isEmpty()) stringNumberOfRows = "0";
+        if(stringNumberOfColumns.isEmpty()) stringNumberOfColumns = "0";
+
+        numberOfRows = Integer.parseInt(stringNumberOfRows) + 1;
+        numberOfColumns = Integer.parseInt(stringNumberOfColumns) + 3;
+
+        originalValuesList.clear();
+        for (int i = 0; i < numberOfColumns * numberOfRows; i++) {
+            if (i == numberOfColumns - 2) {
+                originalValuesList.add("Optimal");
+            } else if (i == numberOfColumns - 1) {
+                originalValuesList.add("Rating");
+            } else if (i < numberOfColumns || (i % numberOfColumns) == 0) {
+                originalValuesList.add("");
+            } else {
+                originalValuesList.add("");
+            }
+        }
+
+        getOptimalValues();
+        getRelativeValues();
+        getRelativeRatingValues();
+        getIntegralValues();
+        getIntegralIndicatorValue();
+
+        mainFragment.notifyOriginalDataChanged();
     }
 }

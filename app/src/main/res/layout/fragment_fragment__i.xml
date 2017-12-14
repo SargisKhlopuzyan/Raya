@@ -7,9 +7,8 @@
     tools:context="com.example.sargiskh.raya.fragments.Fragment_I">
 
     <ScrollView
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:fillViewport="true">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -18,82 +17,5 @@
             android:orientation="horizontal">
         </android.support.v7.widget.RecyclerView>
     </ScrollView>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:paddingRight="10dp"
-                    android:gravity="bottom"
-                    android:textColor="@android:color/black"
-                    android:text="@string/rows" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:paddingRight="10dp"
-                    android:gravity="bottom"
-                    android:textColor="@android:color/black"
-                    android:text="@string/columns" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <EditText
-                    android:id="@+id/editTextNumberOfRows"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="bottom"
-                    android:minWidth="50dp"
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:inputType="number"/>
-
-                <EditText
-                    android:id="@+id/editTextNumberOfColumns"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="bottom"
-                    android:minWidth="50dp"
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:inputType="number"/>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/buttonSave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_margin="0dp"
-            android:background="@drawable/button_background"
-            android:text="Save"/>
-
-    </LinearLayout>
 
 </LinearLayout>
