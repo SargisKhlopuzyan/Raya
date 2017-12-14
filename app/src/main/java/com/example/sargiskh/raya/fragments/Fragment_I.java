@@ -21,14 +21,14 @@ import com.example.sargiskh.raya.adapter.RecyclerViewAdapter_I;
  */
 public class Fragment_I extends Fragment {
 
+    private MainActivity activity;
+    private RecyclerViewAdapter_I recyclerViewAdapter;
+
+    public RecyclerView recyclerView;
     public EditText editTextNumberOfRows;
     public EditText editTextNumberOfColumns;
     public Button buttonSave;
-    public RecyclerView recyclerView;
 
-    private RecyclerViewAdapter_I recyclerViewAdapter;
-
-    private MainActivity activity;
 
     public Fragment_I() {
         // Required empty public constructor
@@ -68,11 +68,13 @@ public class Fragment_I extends Fragment {
         activity.numberOfColumns = Integer.parseInt(stringNumberOfColumns);
 
         activity.originalData.clear();
-        int index = 0;
         for (int i = 0; i< activity.numberOfColumns*activity.numberOfRows; i++) {
-            if (i < activity.numberOfColumns || (i % activity.numberOfColumns) == 0) {
-                activity.originalData.add("No " + index);
-                ++index;
+            if (i == activity.numberOfColumns - 2) {
+                activity.originalData.add("Optimal");
+            } else if (i == activity.numberOfColumns - 1) {
+                activity.originalData.add("Rating");
+            } else if (i < activity.numberOfColumns || (i % activity.numberOfColumns) == 0) {
+                activity.originalData.add("");
             } else {
                 activity.originalData.add("");
             }

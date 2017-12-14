@@ -16,20 +16,20 @@ import java.util.List;
  * Created by sargiskh on 12/11/2017.
  */
 
-public class RecyclerViewAdapter_III extends RecyclerView.Adapter<RecyclerViewAdapter_III.ViewHolder> {
+public class RecyclerViewAdapter_IV extends RecyclerView.Adapter<RecyclerViewAdapter_IV.ViewHolder> {
 
-    private List<String> relativeValuesList;
+    private List<String> relativeRatingValuesList;
     private int numberOfRows = 0;
     private int numberOfColumns = 0;
 
-    public RecyclerViewAdapter_III(List<String> relativeValuesList, int numberOfRows, int numberOfColumns) {
-        this.relativeValuesList = relativeValuesList;
+    public RecyclerViewAdapter_IV(List<String> relativeRatingValuesList, int numberOfRows, int numberOfColumns) {
+        this.relativeRatingValuesList = relativeRatingValuesList;
         this.numberOfRows = numberOfRows;
         this.numberOfColumns = numberOfColumns;
     }
 
     @Override
-    public RecyclerViewAdapter_III.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerViewAdapter_IV.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -40,12 +40,12 @@ public class RecyclerViewAdapter_III extends RecyclerView.Adapter<RecyclerViewAd
             ((LinearLayout)view).addView(childView);
         }
 
-        RecyclerViewAdapter_III.ViewHolder viewHolder = new RecyclerViewAdapter_III.ViewHolder(view);
+        RecyclerViewAdapter_IV.ViewHolder viewHolder = new RecyclerViewAdapter_IV.ViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerViewAdapter_III.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final RecyclerViewAdapter_IV.ViewHolder viewHolder, final int position) {
 
         for (int rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
 
@@ -57,14 +57,14 @@ public class RecyclerViewAdapter_III extends RecyclerView.Adapter<RecyclerViewAd
                         if (rowIndex == 0) {
                             textView.setText("Optimal");
                         } else {
-                            String optimalValue = relativeValuesList.get(itemPosition).equals("0") ? "Min" : "Max";
+                            String optimalValue = relativeRatingValuesList.get(itemPosition).equals("0") ? "Min" : "Max";
                             textView.setText(optimalValue);
                         }
                     } else {
-                        textView.setText(relativeValuesList.get(itemPosition));
+                        textView.setText(relativeRatingValuesList.get(itemPosition));
                     }
                 } else {
-                    textView.setText(relativeValuesList.get(itemPosition));
+                    textView.setText(relativeRatingValuesList.get(itemPosition));
                 }
             }
         }

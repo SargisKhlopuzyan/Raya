@@ -21,11 +21,9 @@ import java.util.Arrays;
  */
 public class Fragment_II extends Fragment {
 
-    public RecyclerView recyclerView;
-
-    private RecyclerViewAdapter_II recyclerViewAdapter;
-
     private MainActivity activity;
+    private RecyclerViewAdapter_II recyclerViewAdapter;
+    public RecyclerView recyclerView;
 
     public Fragment_II() {
         // Required empty public constructor

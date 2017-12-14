@@ -1,19 +1,15 @@
 package com.example.sargiskh.raya.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.sargiskh.raya.MainActivity;
 import com.example.sargiskh.raya.R;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -52,17 +48,21 @@ public class RecyclerViewAdapter_II extends RecyclerView.Adapter<RecyclerViewAda
 
     @Override
     public void onBindViewHolder(final RecyclerViewAdapter_II.ViewHolder viewHolder, final int position) {
-
-        Log.e("LOG_TAG", "" + (Arrays.toString(optimalValuesList.toArray())));
-
         for (int rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
             if (viewHolder.linearLayout.getChildAt(rowIndex) instanceof TextView) {
-                final TextView textView = ((TextView) (viewHolder.linearLayout.getChildAt(rowIndex)));
+                final TextView textView = (TextView)viewHolder.linearLayout.getChildAt(rowIndex);
 
                 textView.setBackgroundResource(R.drawable.recycler_view_item_rounded_background);
                 int itemPosition = position + rowIndex * numberOfColumns;
                 if (position == 0 || rowIndex == 0 || position == (numberOfColumns - 1)) {
-                    textView.setText(data.get(itemPosition));
+                    if (rowIndex == 0 && position == numberOfColumns - 2) {
+                        textView.setText("Optimal");
+                    } else {
+                        textView.setText(data.get(itemPosition));
+                    }
+                } else if (position == (numberOfColumns - 2)) {
+                    String optimalValue = data.get(itemPosition).equals("0") ? "Min" : "Max";
+                    textView.setText(optimalValue);;
                 } else {
                     String stringValue = (data.get(itemPosition)).isEmpty() ? "0" : data.get(itemPosition);
                     textView.setText(stringValue);

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="100dp"
+    android:minHeight="50dp"
+    android:padding="5dp"
+    android:gravity="center_vertical"
+    android:layout_gravity="center_vertical"
+    android:textColor="@android:color/black"
+    android:textSize="@dimen/recycler_view_text_size"
+    android:textAllCaps="false"
+    android:maxLines="1"
+    android:singleLine="true"
+    android:background="@drawable/recycler_view_item_rounded_background"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
